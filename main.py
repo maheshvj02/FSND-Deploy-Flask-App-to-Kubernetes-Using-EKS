@@ -87,10 +87,14 @@ def decode_jwt():
     """
     Check user token and return non-secret data
     """
+    print("hello")
     if not 'Authorization' in request.headers:
         abort(401)
     data = request.headers['Authorization']
+    print("data",data)
     token = str.replace(str(data), 'Bearer ', '')
+    print("token",token)
+    print("JWT_SECRET",JWT_SECRET)
     try:
         data = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
     except: # pylint: disable=bare-except
@@ -108,6 +112,7 @@ def _get_jwt(user_data):
     payload = {'exp': exp_time,
                'nbf': datetime.datetime.utcnow(),
                'email': user_data['email']}
+    print('sec',JWT_SECRET)           
     return jwt.encode(payload, JWT_SECRET, algorithm='HS256')
 
 if __name__ == '__main__':
